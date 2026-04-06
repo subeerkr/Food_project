@@ -12,9 +12,17 @@ import {
   Grid,
 } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { useAuth } from '../context/AuthContext';
+import { 
+  auth,
+  createUserWithEmailAndPassword, 
+  sendEmailVerification, 
+  updateProfile 
+} from '../firebase';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -24,6 +32,7 @@ const Signup = () => {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,8 +42,10 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setMessage('');
     
     // Basic validation
     if (!formData.firstName || !formData.lastName || !formData.email || 
@@ -53,16 +64,36 @@ const Signup = () => {
       return;
     }
 
-    // Here you would typically make an API call to register the user
-    // For now, we'll just simulate a successful registration
-    localStorage.setItem('user', JSON.stringify({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      phone: formData.phone,
-    }));
-    
-    navigate('/');
+    try {
+      // 1. Create user in Firebase
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email, 
+        formData.password
+      );
+      const user = userCredential.user;
+
+      // 2. Update profile with display name
+      await updateProfile(user, {
+        displayName: `${formData.firstName} ${formData.lastName}`
+      });
+
+      // 3. Send verification email
+      await sendEmailVerification(user);
+
+      // 4. Force logout to prevent access until verified
+      await logout();
+
+      // 5. Redirect to Login and pass the message
+      navigate('/login', { 
+        state: { 
+          message: 'Verification email sent! Please check your inbox and verify your email before logging in.' 
+        } 
+      });
+
+    } catch (err) {
+      setError(err.message || 'Signup failed. Please try again.');
+    }
   };
 
   return (
@@ -101,6 +132,11 @@ const Signup = () => {
           {error && (
             <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
               {error}
+            </Alert>
+          )}
+          {message && (
+            <Alert severity="success" sx={{ width: '100%', mb: 2 }}>
+              {message}
             </Alert>
           )}
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
@@ -183,7 +219,7 @@ const Signup = () => {
                 variant="body2"
                 onClick={() => navigate('/login')}
               >
-                {"Already have an account? Sign In"}
+                {"Already have an account? Login"}
               </Link>
             </Box>
           </Box>

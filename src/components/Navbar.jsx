@@ -29,10 +29,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,6 +48,12 @@ const Navbar = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+    handleMobileMenuClose();
   };
 
   const handleCartOpen = () => {
@@ -98,7 +108,7 @@ const Navbar = () => {
           </Box>
 
           {/* Desktop Menu */}
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 2 }}>
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
             <Button color="inherit" onClick={() => navigate('/')}>
               Home
             </Button>
@@ -114,12 +124,33 @@ const Navbar = () => {
             >
               Menu
             </Button>
-            <Button color="inherit" onClick={() => navigate('/login')}>
-              Login
-            </Button>
-            <Button color="inherit" onClick={() => navigate('/signup')}>
-              Sign Up
-            </Button>
+            
+            {user ? (
+              <>
+                <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                  <AccountCircleIcon sx={{ mr: 0.5 }} />
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {user.displayName}
+                  </Typography>
+                </Box>
+                <Button 
+                  color="inherit" 
+                  onClick={handleLogout}
+                  startIcon={<LogoutIcon />}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button color="inherit" onClick={() => navigate('/login')}>
+                  Login
+                </Button>
+                <Button color="inherit" onClick={() => navigate('/signup')}>
+                  Sign Up
+                </Button>
+              </>
+            )}
           </Box>
 
           {/* Cart Icon */}
@@ -173,6 +204,18 @@ const Navbar = () => {
         }}
       >
         <List>
+          {user && (
+            <ListItem sx={{ py: 3, backgroundColor: 'rgba(0,0,0,0.1)' }}>
+              <ListItemIcon>
+                <AccountCircleIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText 
+                primary={user.displayName} 
+                secondary={user.email} 
+                secondaryTypographyProps={{ style: { color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem' } }}
+              />
+            </ListItem>
+          )}
           <ListItem button onClick={() => { navigate('/'); handleMobileMenuClose(); }}>
             <ListItemIcon>
               <HomeIcon sx={{ color: 'white' }} />
@@ -186,18 +229,30 @@ const Navbar = () => {
             <ListItemText primary="Menu" />
             <KeyboardArrowDownIcon sx={{ color: 'white' }} />
           </ListItem>
-          <ListItem button onClick={() => { navigate('/login'); handleMobileMenuClose(); }}>
-            <ListItemIcon>
-              <LoginIcon sx={{ color: 'white' }} />
-            </ListItemIcon>
-            <ListItemText primary="Login" />
-          </ListItem>
-          <ListItem button onClick={() => { navigate('/signup'); handleMobileMenuClose(); }}>
-            <ListItemIcon>
-              <PersonAddIcon sx={{ color: 'white' }} />
-            </ListItemIcon>
-            <ListItemText primary="Sign Up" />
-          </ListItem>
+          
+          {!user ? (
+            <>
+              <ListItem button onClick={() => { navigate('/login'); handleMobileMenuClose(); }}>
+                <ListItemIcon>
+                  <LoginIcon sx={{ color: 'white' }} />
+                </ListItemIcon>
+                <ListItemText primary="Login" />
+              </ListItem>
+              <ListItem button onClick={() => { navigate('/signup'); handleMobileMenuClose(); }}>
+                <ListItemIcon>
+                  <PersonAddIcon sx={{ color: 'white' }} />
+                </ListItemIcon>
+                <ListItemText primary="Sign Up" />
+              </ListItem>
+            </>
+          ) : (
+            <ListItem button onClick={handleLogout}>
+              <ListItemIcon>
+                <LogoutIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
+          )}
         </List>
       </Drawer>
 
