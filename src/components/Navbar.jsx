@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -17,22 +17,22 @@ import {
   Divider,
   ListItemSecondaryAction,
   IconButton as MuiIconButton,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import LoginIcon from '@mui/icons-material/Login';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -52,7 +52,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/');
+    navigate("/signup");
     handleMobileMenuClose();
   };
 
@@ -73,43 +73,52 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { name: 'Appetizers', category: 'appetizers' },
-    { name: 'Main Course', category: 'main-course' },
-    { name: 'Desserts', category: 'desserts' },
-    { name: 'Beverages', category: 'beverages' },
+    { name: "Appetizers", category: "appetizers" },
+    { name: "Main Course", category: "main-course" },
+    { name: "Desserts", category: "desserts" },
+    { name: "Beverages", category: "beverages" },
   ];
 
   return (
     <>
-      <AppBar position="fixed" sx={{ backgroundColor: 'rgba(255, 111, 0, 0.95)' }}>
+      <AppBar
+        position="fixed"
+        sx={{ backgroundColor: "rgba(255, 111, 0, 0.95)" }}
+      >
         <Toolbar>
           {/* Mobile Menu Button */}
           <IconButton
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: "none" } }}
             onClick={handleMobileMenuOpen}
           >
             <MenuIcon />
           </IconButton>
 
           {/* Logo */}
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
             <RestaurantIcon sx={{ mr: 1 }} />
             <Typography
               variant="h6"
               component="div"
-              sx={{ cursor: 'pointer' }}
-              onClick={() => navigate('/')}
+              sx={{ cursor: "pointer" }}
+              onClick={() => navigate("/")}
             >
               Swagat Foods
             </Typography>
           </Box>
 
           {/* Desktop Menu */}
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
-            <Button color="inherit" onClick={() => navigate('/')}>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Button color="inherit" onClick={() => navigate("/")}>
               Home
             </Button>
             <Button
@@ -117,24 +126,24 @@ const Navbar = () => {
               onClick={handleMenuClick}
               endIcon={<KeyboardArrowDownIcon />}
               sx={{
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
                 },
               }}
             >
               Menu
             </Button>
-            
+
             {user ? (
               <>
-                <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                   <AccountCircleIcon sx={{ mr: 0.5 }} />
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
                     {user.displayName}
                   </Typography>
                 </Box>
-                <Button 
-                  color="inherit" 
+                <Button
+                  color="inherit"
                   onClick={handleLogout}
                   startIcon={<LogoutIcon />}
                 >
@@ -143,10 +152,10 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Button color="inherit" onClick={() => navigate('/login')}>
+                <Button color="inherit" onClick={() => navigate("/login")}>
                   Login
                 </Button>
-                <Button color="inherit" onClick={() => navigate('/signup')}>
+                <Button color="inherit" onClick={() => navigate("/signup")}>
                   Sign Up
                 </Button>
               </>
@@ -170,14 +179,14 @@ const Navbar = () => {
         PaperProps={{
           sx: {
             mt: 1.5,
-            '& .MuiMenuItem-root': {
+            "& .MuiMenuItem-root": {
               px: 3,
               py: 1.5,
             },
           },
         }}
       >
-        {menuItems.map((item) => (
+        {menuItems.map(item => (
           <MenuItem
             key={item.category}
             onClick={() => {
@@ -198,49 +207,69 @@ const Navbar = () => {
         PaperProps={{
           sx: {
             width: 240,
-            backgroundColor: 'rgba(255, 111, 0, 0.95)',
-            color: 'white',
+            backgroundColor: "rgba(255, 111, 0, 0.95)",
+            color: "white",
           },
         }}
       >
         <List>
           {user && (
-            <ListItem sx={{ py: 3, backgroundColor: 'rgba(0,0,0,0.1)' }}>
+            <ListItem sx={{ py: 3, backgroundColor: "rgba(0,0,0,0.1)" }}>
               <ListItemIcon>
-                <AccountCircleIcon sx={{ color: 'white' }} />
+                <AccountCircleIcon sx={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText 
-                primary={user.displayName} 
-                secondary={user.email} 
-                secondaryTypographyProps={{ style: { color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem' } }}
+              <ListItemText
+                primary={user.displayName}
+                secondary={user.email}
+                secondaryTypographyProps={{
+                  style: { color: "rgba(255,255,255,0.7)", fontSize: "0.8rem" },
+                }}
               />
             </ListItem>
           )}
-          <ListItem button onClick={() => { navigate('/'); handleMobileMenuClose(); }}>
+          <ListItem
+            button
+            onClick={() => {
+              navigate("/");
+              handleMobileMenuClose();
+            }}
+          >
             <ListItemIcon>
-              <HomeIcon sx={{ color: 'white' }} />
+              <HomeIcon sx={{ color: "white" }} />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
           <ListItem button onClick={handleMenuClick}>
             <ListItemIcon>
-              <MenuIcon sx={{ color: 'white' }} />
+              <MenuIcon sx={{ color: "white" }} />
             </ListItemIcon>
             <ListItemText primary="Menu" />
-            <KeyboardArrowDownIcon sx={{ color: 'white' }} />
+            <KeyboardArrowDownIcon sx={{ color: "white" }} />
           </ListItem>
-          
+
           {!user ? (
             <>
-              <ListItem button onClick={() => { navigate('/login'); handleMobileMenuClose(); }}>
+              <ListItem
+                button
+                onClick={() => {
+                  navigate("/login");
+                  handleMobileMenuClose();
+                }}
+              >
                 <ListItemIcon>
-                  <LoginIcon sx={{ color: 'white' }} />
+                  <LoginIcon sx={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary="Login" />
               </ListItem>
-              <ListItem button onClick={() => { navigate('/signup'); handleMobileMenuClose(); }}>
+              <ListItem
+                button
+                onClick={() => {
+                  navigate("/signup");
+                  handleMobileMenuClose();
+                }}
+              >
                 <ListItemIcon>
-                  <PersonAddIcon sx={{ color: 'white' }} />
+                  <PersonAddIcon sx={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary="Sign Up" />
               </ListItem>
@@ -248,7 +277,7 @@ const Navbar = () => {
           ) : (
             <ListItem button onClick={handleLogout}>
               <ListItemIcon>
-                <LogoutIcon sx={{ color: 'white' }} />
+                <LogoutIcon sx={{ color: "white" }} />
               </ListItemIcon>
               <ListItemText primary="Logout" />
             </ListItem>
@@ -273,29 +302,33 @@ const Navbar = () => {
           </Typography>
           <Divider />
           {cartItems.length === 0 ? (
-            <Typography sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography sx={{ mt: 2, textAlign: "center" }}>
               Your cart is empty
             </Typography>
           ) : (
             <List>
-              {cartItems.map((item) => (
+              {cartItems.map(item => (
                 <ListItem key={item.id}>
                   <ListItemText
                     primary={item.name}
                     secondary={`$${item.price} x ${item.quantity}`}
                   />
                   <ListItemSecondaryAction>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <MuiIconButton
                         size="small"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
                       >
                         <RemoveIcon />
                       </MuiIconButton>
                       <Typography>{item.quantity}</Typography>
                       <MuiIconButton
                         size="small"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                       >
                         <AddIcon />
                       </MuiIconButton>
@@ -312,7 +345,7 @@ const Navbar = () => {
               ))}
             </List>
           )}
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
             <Typography variant="h6">
               Total: ${getCartTotal().toFixed(2)}
             </Typography>
@@ -320,7 +353,7 @@ const Navbar = () => {
               variant="contained"
               color="primary"
               disabled={cartItems.length === 0}
-              onClick={() => navigate('/checkout')}
+              onClick={() => navigate("/checkout")}
             >
               Checkout
             </Button>
@@ -331,4 +364,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
