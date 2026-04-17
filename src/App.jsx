@@ -5,6 +5,7 @@ import Menu from './components/Menu';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Checkout from './components/Checkout';
+import AdminPanel from './components/AdminPanel';
 import { CssBaseline, ThemeProvider, createTheme, Box } from '@mui/material';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/admin" element={<AdminPanel />} />
                 {/* fallback route if no match */}
                 <Route
                   path="*"

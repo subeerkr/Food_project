@@ -21,6 +21,8 @@ import {
   ListItemText,
 } from '@mui/material';
 import { useCart } from '../context/CartContext';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import QrCodeIcon from '@mui/icons-material/QrCode';
@@ -33,6 +35,7 @@ const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -63,10 +66,47 @@ const Checkout = () => {
     setPaymentMethod(event.target.value);
   };
 
-  const handlePlaceOrder = () => {
-    console.log('Order placed:', { formData, paymentMethod, cartItems });
-    setOrderPlaced(true);
-    clearCart();
+  const handlePlaceOrder = async () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    setLoading(true);
+    console.log("Step 1: Preparing order data...");
+    
+    try {
+      const orderData = {
+        customerDetails: formData,
+        paymentMethod: paymentMethod,
+        items: cartItems.map(item => ({
+          name: item.name,
+          price: Number(item.price),
+          quantity: item.quantity || 1
+        })),
+        totalAmount: (getCartTotal() + 2.99 + getCartTotal() * 0.1).toFixed(2),
+        status: 'Pending',
+        createdAt: serverTimestamp()
+      };
+
+      console.log("Step 2: Attempting to save to Firestore...", orderData);
+      
+      // Attempting to write to the 'orders' collection
+      const docRef = await addDoc(collection(db, 'orders'), orderData);
+      
+      console.log("Step 3: Order successfully saved with ID:", docRef.id);
+      
+      setOrderPlaced(true);
+      clearCart();
+    } catch (error) {
+      console.error("FIREBASE ERROR:", error);
+      alert(`Order Failed! Technical details: ${error.message}. 
+      
+Please make sure you have "Created a Firestore Database" in your Firebase console!`);
+    } finally {
+      setLoading(false);
+      console.log("Step 4: Cleanup completed.");
+    }
   };
 
   const getStepContent = (step) => {
@@ -229,9 +269,9 @@ const Checkout = () => {
             <Button
               variant="contained"
               onClick={handlePlaceOrder}
-              disabled={!paymentMethod}
+              disabled={!paymentMethod || loading}
             >
-              Place Order
+              {loading ? 'Processing...' : 'Place Order'}
             </Button>
           ) : (
             <Button variant="contained" onClick={handleNext}>
