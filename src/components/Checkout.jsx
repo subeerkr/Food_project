@@ -84,8 +84,8 @@ const Checkout = () => {
           price: Number(item.price),
           quantity: item.quantity || 1
         })),
-        totalAmount: (getCartTotal() + 2.99 + getCartTotal() * 0.1).toFixed(2),
-        status: 'Pending',
+        totalAmount: (getCartTotal() + 40 + getCartTotal() * 0.05).toFixed(2),
+        status: 'Completed',
         createdAt: serverTimestamp()
       };
 
@@ -122,10 +122,10 @@ Please make sure you have "Created a Firestore Database" in your Firebase consol
                 <ListItem key={item.id}>
                   <ListItemText
                     primary={item.name}
-                    secondary={`$${item.price} x ${item.quantity || 1}`}
+                    secondary={`₹${item.price} x ${item.quantity || 1}`}
                   />
                   <Typography>
-                    ${(item.price * (item.quantity || 1)).toFixed(2)}
+                    ₹{(item.price * (item.quantity || 1)).toFixed(2)}
                   </Typography>
                 </ListItem>
               ))}
@@ -133,21 +133,21 @@ Please make sure you have "Created a Firestore Database" in your Firebase consol
             <Divider sx={{ my: 2 }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <Typography variant="h6">Subtotal</Typography>
-              <Typography>${getCartTotal().toFixed(2)}</Typography>
+              <Typography>₹{getCartTotal().toFixed(2)}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <Typography variant="h6">Delivery Fee</Typography>
-              <Typography>$2.99</Typography>
+              <Typography>₹40.00</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-              <Typography variant="h6">Tax (10%)</Typography>
-              <Typography>${(getCartTotal() * 0.1).toFixed(2)}</Typography>
+              <Typography variant="h6">GST (5%)</Typography>
+              <Typography>₹{(getCartTotal() * 0.05).toFixed(2)}</Typography>
             </Box>
             <Divider sx={{ my: 2 }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <Typography variant="h5">Total</Typography>
               <Typography variant="h5">
-                ${(getCartTotal() + 2.99 + getCartTotal() * 0.1).toFixed(2)}
+                ₹{(getCartTotal() + 40 + getCartTotal() * 0.05).toFixed(2)}
               </Typography>
             </Box>
           </Box>

@@ -311,7 +311,7 @@ const Navbar = () => {
                 <ListItem key={item.id}>
                   <ListItemText
                     primary={item.name}
-                    secondary={`$${item.price} x ${item.quantity}`}
+                    secondary={`₹${item.price} x ${item.quantity}`}
                   />
                   <ListItemSecondaryAction>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -347,7 +347,7 @@ const Navbar = () => {
           )}
           <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
             <Typography variant="h6">
-              Total: ${getCartTotal().toFixed(2)}
+              Total: ₹{getCartTotal().toFixed(2)}
             </Typography>
             <Button
               variant="contained"

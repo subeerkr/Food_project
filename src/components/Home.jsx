@@ -17,7 +17,7 @@ const featuredItems = [
     name: 'Butter Chicken',
     description: 'Tender chicken in rich, creamy tomato sauce',
     image: "/images/butter_chicken.jpg",
-    price: '$15.99',
+    price: '₹1200',
     category: 'main-course'
   },
   {
@@ -25,7 +25,7 @@ const featuredItems = [
     name: 'Paneer Tikka',
     description: 'Grilled cottage cheese marinated in spiced yogurt',
     image: "/images/paneer-tikka.jpg",
-    price: '$14.99',
+    price: '₹800',
     category: 'main-course'
   },
   {
@@ -33,7 +33,7 @@ const featuredItems = [
     name: 'Biryani',
     description: 'Fragrant basmati rice cooked with aromatic spices',
     image: "/images/Veg_biriyani.jpg",
-    price: '$16.99',
+    price: '₹950',
     category: 'main-course'
   }
 ];
