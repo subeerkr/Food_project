@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -10,15 +10,15 @@ import {
   Button,
   Box,
   CircularProgress,
-} from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { useCart } from '../context/CartContext';
-import { db } from '../firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+} from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { useCart } from "../context/CartContext";
+import { db } from "../firebase";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 const Menu = () => {
   const { category } = useParams();
-  const validCategory = category || 'appetizers';
+  const validCategory = category || "starters";
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
@@ -26,32 +26,36 @@ const Menu = () => {
   useEffect(() => {
     setLoading(true);
     const q = query(
-      collection(db, 'foodItems'),
-      where('category', '==', validCategory)
+      collection(db, "foodItems"),
+      where("category", "==", validCategory),
     );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const foodData = [];
-      querySnapshot.forEach((doc) => {
-        foodData.push({ id: doc.id, ...doc.data() });
-      });
-      setItems(foodData);
-      setLoading(false);
-    }, (error) => {
-      console.error("Error fetching menu:", error);
-      setLoading(false);
-    });
+    const unsubscribe = onSnapshot(
+      q,
+      querySnapshot => {
+        const foodData = [];
+        querySnapshot.forEach(doc => {
+          foodData.push({ id: doc.id, ...doc.data() });
+        });
+        setItems(foodData);
+        setLoading(false);
+      },
+      error => {
+        console.error("Error fetching menu:", error);
+        setLoading(false);
+      },
+    );
 
     return () => unsubscribe();
   }, [validCategory]);
 
-  const handleAddToCart = (item) => {
+  const handleAddToCart = item => {
     addToCart(item);
   };
 
   if (loading) {
     return (
-      <Container sx={{ py: 4, textAlign: 'center' }}>
+      <Container sx={{ py: 4, textAlign: "center" }}>
         <CircularProgress />
       </Container>
     );
@@ -63,22 +67,22 @@ const Menu = () => {
         variant="h4"
         component="h1"
         gutterBottom
-        sx={{ textTransform: 'capitalize', mb: 4 }}
+        sx={{ textTransform: "capitalize", mb: 4 }}
       >
-        {validCategory.replace('-', ' ')}
+        {validCategory.replace("-", " ")}
       </Typography>
 
       <Grid container spacing={4}>
-        {items.map((item) => (
+        {items.map(item => (
           <Grid item key={item.id} xs={12} sm={6} md={4}>
             <Card
               sx={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                transition: "transform 0.2s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
                   boxShadow: 3,
                 },
               }}
@@ -88,7 +92,7 @@ const Menu = () => {
                 height="200"
                 image={item.image}
                 alt={item.name}
-                sx={{ objectFit: 'cover' }}
+                sx={{ objectFit: "cover" }}
               />
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -99,9 +103,9 @@ const Menu = () => {
                 </Typography>
                 <Box
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                     mt: 2,
                   }}
                 >

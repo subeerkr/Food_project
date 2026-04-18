@@ -73,7 +73,7 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { name: "Appetizers", category: "appetizers" },
+    { name: "Starters", category: "Starters" },
     { name: "Main Course", category: "main-course" },
     { name: "Desserts", category: "desserts" },
     { name: "Beverages", category: "beverages" },

@@ -5,7 +5,7 @@ Swagat Foods is a modern, responsive web application for an Indian restaurant. I
 ## Features
 
 - **Home Page**: A visually appealing landing page with a video background, featured menu items, and restaurant locations.
-- **Menu**: Dynamic menu categories (Appetizers, Main Course, Desserts, Beverages) with the ability to add items to the cart.
+- **Menu**: Dynamic menu categories (Starters, Main Course, Desserts, Beverages) with the ability to add items to the cart.
 - **Cart System**: A fully functional cart system to manage items, update quantities, and calculate totals.
 - **Checkout**: A multi-step checkout process including order summary, delivery details, and payment options.
 - **Authentication**: Signup and login functionality for users.
@@ -14,46 +14,47 @@ Swagat Foods is a modern, responsive web application for an Indian restaurant. I
 - **Theming**: Custom Material-UI theme for consistent styling.
 
 ## Project Structure
+
 swagat_foods_vite/
 ├── public/
-│   ├── images/                 # Static images (e.g., /menu-item-1.jpg)
-│   └── favicon.ico
+│ ├── images/ # Static images (e.g., /menu-item-1.jpg)
+│ └── favicon.ico
 ├── src/
-│   ├── api/                    # (+) For handling API calls (e.g., fetching menu, user auth)
-│   │   ├── authService.js
-│   │   └── menuService.js
-│   ├── assets/                 # Assets imported in components (logos, icons)
-│   ├── components/             # (*) Reusable components used across multiple pages
-│   │   ├── ui/                 # (++) Generic, reusable UI elements (Button, Card, Input)
-│   │   │   ├── Button.jsx
-│   │   │   └── Card.jsx
-│   │   ├── layout/             # (++) Components that define the page structure
-│   │   │   ├── Navbar.jsx
-│   │   │   └── Footer.jsx
-│   │   ├── cart/               # (++) Components related to the cart feature
-│   │   │   ├── Cart.jsx
-│   │   │   └── CartIcon.jsx
-│   │   └── chatbot/            # (++) Components for the chatbot feature
-│   │       └── ChatBot.jsx
-│   ├── context/                # Global state with React Context
-│   │   ├── AuthContext.jsx
-│   │   └── CartContext.jsx
-│   ├── hooks/                  # (+) Custom React hooks (e.g., useApi, useAuth)
-│   │   └── useCart.js
-│   ├── pages/                  # (*) Top-level components for each route/page
-│   │   ├── HomePage.jsx
-│   │   ├── MenuPage.jsx
-│   │   ├── LoginPage.jsx
-│   │   ├── SignupPage.jsx
-│   │   └── CheckoutPage.jsx
-│   ├── routes/                 # Routing configuration
-│   │   └── AppRoutes.jsx
-│   ├── styles/                 # Global styles
-│   │   ├── _theme.css          # (~) CSS variables for theme (colors, fonts)
-│   │   └── global.css
-│   ├── utils/                  # (+) Helper functions (e.g., formatCurrency, validators)
-│   ├── App.jsx                 # Main application component (layout and routing)
-│   └── main.jsx                # Application entry point
+│ ├── api/ # (+) For handling API calls (e.g., fetching menu, user auth)
+│ │ ├── authService.js
+│ │ └── menuService.js
+│ ├── assets/ # Assets imported in components (logos, icons)
+│ ├── components/ # (_) Reusable components used across multiple pages
+│ │ ├── ui/ # (++) Generic, reusable UI elements (Button, Card, Input)
+│ │ │ ├── Button.jsx
+│ │ │ └── Card.jsx
+│ │ ├── layout/ # (++) Components that define the page structure
+│ │ │ ├── Navbar.jsx
+│ │ │ └── Footer.jsx
+│ │ ├── cart/ # (++) Components related to the cart feature
+│ │ │ ├── Cart.jsx
+│ │ │ └── CartIcon.jsx
+│ │ └── chatbot/ # (++) Components for the chatbot feature
+│ │ └── ChatBot.jsx
+│ ├── context/ # Global state with React Context
+│ │ ├── AuthContext.jsx
+│ │ └── CartContext.jsx
+│ ├── hooks/ # (+) Custom React hooks (e.g., useApi, useAuth)
+│ │ └── useCart.js
+│ ├── pages/ # (_) Top-level components for each route/page
+│ │ ├── HomePage.jsx
+│ │ ├── MenuPage.jsx
+│ │ ├── LoginPage.jsx
+│ │ ├── SignupPage.jsx
+│ │ └── CheckoutPage.jsx
+│ ├── routes/ # Routing configuration
+│ │ └── AppRoutes.jsx
+│ ├── styles/ # Global styles
+│ │ ├── \_theme.css # (~) CSS variables for theme (colors, fonts)
+│ │ └── global.css
+│ ├── utils/ # (+) Helper functions (e.g., formatCurrency, validators)
+│ ├── App.jsx # Main application component (layout and routing)
+│ └── main.jsx # Application entry point
 ├── .gitignore
 ├── index.html
 ├── package.json
@@ -61,17 +62,17 @@ swagat_foods_vite/
 ├── eslint.config.js
 └── README.me
 
-
 ## Installation
 
 1. Clone the repository:
    ```bash
    git clone <repository-url>
    cd swagat_foods_vite
+   ```
 
 # npm install
-# npm run dev
 
+# npm run dev
 
 Scripts
 npm run dev: Start the development server.
@@ -85,7 +86,6 @@ State Management: React Context API
 Styling: CSS, Material-UI Theming
 Linting: ESLint
 
-
 The production-ready files will be available in the dist directory. You can deploy these files to any static hosting service like Netlify, Vercel, or AWS S3.
 
 Future Enhancements
@@ -96,8 +96,7 @@ Improved accessibility features.
 License
 This project is licensed under the MIT License.
 
-Enjoy using Swagat Foods! If you have any questions or feedback, feel free to reach out. 
-
+Enjoy using Swagat Foods! If you have any questions or feedback, feel free to reach out.
 
 # React + Vite
 
@@ -112,5 +111,4 @@ Currently, two official plugins are available:
 
 If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
-
-I just removed the link 
+I just removed the link
