@@ -18,7 +18,7 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 const Menu = () => {
   const { category } = useParams();
-  const validCategory = category || "starters";
+  const validCategory = (category || "starters").toLowerCase();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();

@@ -131,7 +131,7 @@ const AdminPanel = () => {
 
   const handleLogin = e => {
     e.preventDefault();
-    if (email === "admin@food.com" && password === "admin@test") {
+    if (email === "admin@test.com" && password === "admin@test") {
       setIsAdmin(true);
       setError("");
     } else {
