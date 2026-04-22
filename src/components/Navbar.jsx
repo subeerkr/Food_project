@@ -16,7 +16,6 @@ import {
   ListItemIcon,
   Divider,
   ListItemSecondaryAction,
-  IconButton as MuiIconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
@@ -315,30 +314,30 @@ const Navbar = () => {
                   />
                   <ListItemSecondaryAction>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <MuiIconButton
+                      <IconButton
                         size="small"
                         onClick={() =>
                           updateQuantity(item.id, item.quantity - 1)
                         }
                       >
                         <RemoveIcon />
-                      </MuiIconButton>
+                      </IconButton>
                       <Typography>{item.quantity}</Typography>
-                      <MuiIconButton
+                      <IconButton
                         size="small"
                         onClick={() =>
                           updateQuantity(item.id, item.quantity + 1)
                         }
                       >
                         <AddIcon />
-                      </MuiIconButton>
-                      <MuiIconButton
+                      </IconButton>
+                      <IconButton
                         size="small"
                         color="error"
                         onClick={() => removeFromCart(item.id)}
                       >
                         <DeleteIcon />
-                      </MuiIconButton>
+                      </IconButton>
                     </Box>
                   </ListItemSecondaryAction>
                 </ListItem>

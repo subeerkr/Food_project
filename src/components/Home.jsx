@@ -27,7 +27,7 @@ const featuredItems = [
     name: "Butter Chicken",
     description: "Tender chicken in rich, creamy tomato sauce",
     image: "/images/butter_chicken.jpg",
-    price: "₹1200",
+    price: "₹300",
     category: "main-course",
   },
   {
@@ -35,7 +35,7 @@ const featuredItems = [
     name: "Paneer Tikka",
     description: "Grilled cottage cheese marinated in spiced yogurt",
     image: "/images/paneer-tikka.jpg",
-    price: "₹800",
+    price: "₹300",
     category: "main-course",
   },
   {
@@ -43,7 +43,7 @@ const featuredItems = [
     name: "Biryani",
     description: "Fragrant basmati rice cooked with aromatic spices",
     image: "/images/Veg_biriyani.jpg",
-    price: "₹950",
+    price: "₹300",
     category: "main-course",
   },
 ];
@@ -257,17 +257,43 @@ const Home = () => {
           >
             FEATURED MENU ITEMS
           </Typography>
-          <Grid container spacing={3}>
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              display: "flex",
+              flexWrap: { xs: "wrap", md: "nowrap" },
+              overflowX: { xs: "visible", md: "hidden" },
+              gap: 3,
+              px: 1,
+            }}
+          >
             {featuredItems.map(item => (
-              <Grid item key={item.id} xs={12} sm={6} md={4}>
-                <Card className="card-hover" sx={{ textAlign: "center" }}>
-                  <CardMedia
-                    component="img"
-                    height="250"
-                    image={item.image}
-                    alt={item.name}
-                    sx={{ objectFit: "cover" }}
-                  />
+              <Grid
+                item
+                key={item.id}
+                sx={{
+                  flex: { xs: "0 0 100%", md: "0 0 33.333%" },
+                  maxWidth: { xs: "100%", md: "33.333%" },
+                  boxSizing: "border-box",
+                  px: 1,
+                }}
+              >
+                <Card
+                  className="card-hover"
+                  sx={{ textAlign: "center", height: "100%" }}
+                >
+                  <Box sx={{ height: 250, overflow: "hidden" }}>
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </Box>
                   <CardContent>
                     <Typography
                       gutterBottom

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   Box,
   IconButton,
@@ -9,11 +10,58 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
 } from '@mui/material';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
+
+// 1. MOVED OUTSIDE: Initialize this once, not on every render
+const GEMINI_API_KEY =
+  (typeof process !== 'undefined' && process.env && process.env.VITE_GEMINI_API_KEY) ||
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY) ||
+  (typeof window !== 'undefined' && window.__GEMINI_API_KEY__) ||
+  '';
+
+let genAI = null;
+try {
+  if (GEMINI_API_KEY) {
+    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+  }
+} catch (err) {
+  console.warn('GoogleGenerativeAI initialization failed:', err);
+}
+
+// 2. DEBUG LOGIC: Check available models
+async function checkModels() {
+  if (!genAI) return;
+  try {
+    const res = await genAI.listModels();
+    const names = res.models.map(m => ({
+      name: m.name,
+      methods: m.supportedGenerationMethods
+    }));
+    console.log("AVAILABLE MODELS:", names);
+  } catch (err) {
+    console.error("Error listing models:", err);
+  }
+}
+
+checkModels();
+
+// 3. TEST RUN: Verify gemini-2.0-flash
+async function runTest() {
+  if (!genAI) return;
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent("Hello bhai");
+    const response = await result.response;
+    console.log("TEST RUN SUCCESS:", response.text());
+  } catch (err) {
+    console.error("TEST RUN ERROR:", err);
+  }
+}
+
+runTest();
 
 const ChatBot = () => {
   const [open, setOpen] = useState(false);
@@ -24,30 +72,46 @@ const ChatBot = () => {
     },
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    // Add user message
-    setMessages((prev) => [...prev, { text: inputMessage, isBot: false }]);
-
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponses = [
-        "I'd be happy to help you with your order!",
-        "You can check our menu for all available dishes.",
-        "We offer delivery within a 5-mile radius.",
-        "Our kitchen is open from 11 AM to 10 PM.",
-        "You can place your order through our website or call us.",
-      ];
-      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-      setMessages((prev) => [...prev, { text: randomResponse, isBot: true }]);
-    }, 1000);
-
+    const userMessage = inputMessage;
     setInputMessage('');
+    
+    setMessages((prev) => [...prev, { text: userMessage, isBot: false }]);
+    setIsTyping(true);
+
+    try {
+      if (!genAI) {
+        throw new Error("Gemini AI is not configured. Please check your API key.");
+      }
+
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      
+      const prompt = `You are a helpful assistant for "Swagat Foods", a premium Indian restaurant. 
+      Answer the customer's query politely. 
+      Customer query: ${userMessage}`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      
+      setMessages((prev) => [...prev, { text: text, isBot: true }]);
+    } catch (err) {
+      console.error("ChatBot Error:", err);
+      
+      setMessages((prev) => [...prev, { 
+        text: "I'm sorry, I'm having trouble connecting right now. Please try again later.", 
+        isBot: true 
+      }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -68,12 +132,8 @@ const ChatBot = () => {
           transition: 'all 0.3s ease-in-out',
           animation: 'bounce 2s infinite',
           '@keyframes bounce': {
-            '0%, 100%': {
-              transform: 'translateY(0)',
-            },
-            '50%': {
-              transform: 'translateY(-10px)',
-            },
+            '0%, 100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(-10px)' },
           },
         }}
       >
@@ -86,10 +146,7 @@ const ChatBot = () => {
         maxWidth="sm"
         fullWidth
         PaperProps={{
-          sx: {
-            height: '80vh',
-            maxHeight: '600px',
-          },
+          sx: { height: '80vh', maxHeight: '600px' },
         }}
       >
         <DialogTitle sx={{ m: 0, p: 2, backgroundColor: 'rgba(255, 111, 0, 0.1)' }}>
@@ -104,23 +161,8 @@ const ChatBot = () => {
           </Box>
         </DialogTitle>
         <DialogContent sx={{ p: 2 }}>
-          <Box
-            sx={{
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2,
-            }}
-          >
-            <Box
-              sx={{
-                flex: 1,
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              }}
-            >
+          <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
               {messages.map((message, index) => (
                 <Box
                   key={index}
@@ -132,13 +174,7 @@ const ChatBot = () => {
                   }}
                 >
                   {message.isBot && (
-                    <SmartToyIcon 
-                      sx={{ 
-                        color: 'rgba(255, 111, 0, 0.9)',
-                        fontSize: 24,
-                        mt: 1
-                      }} 
-                    />
+                    <SmartToyIcon sx={{ color: 'rgba(255, 111, 0, 0.9)', fontSize: 24, mt: 1 }} />
                   )}
                   <Paper
                     sx={{
@@ -153,6 +189,12 @@ const ChatBot = () => {
                   </Paper>
                 </Box>
               ))}
+              {isTyping && (
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                  <SmartToyIcon sx={{ color: 'rgba(255, 111, 0, 0.9)', fontSize: 24 }} />
+                  <Typography variant="body2" color="text.secondary">Assistant is typing...</Typography>
+                </Box>
+              )}
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
@@ -169,9 +211,7 @@ const ChatBot = () => {
                 sx={{
                   backgroundColor: 'rgba(255, 111, 0, 0.9)',
                   color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 111, 0, 1)',
-                  },
+                  '&:hover': { backgroundColor: 'rgba(255, 111, 0, 1)' },
                 }}
               >
                 <SendIcon />
@@ -184,4 +224,4 @@ const ChatBot = () => {
   );
 };
 
-export default ChatBot; 
+export default ChatBot;
